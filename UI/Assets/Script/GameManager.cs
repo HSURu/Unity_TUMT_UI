@@ -2,6 +2,7 @@
 using UnityEngine.Audio;    //引用 音頻 API
 using UnityEngine.UI;       //引用 介面 API
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,8 +26,38 @@ public class GameManager : MonoBehaviour
         mixer.SetFloat("VSFX", value);
     }
 
+
     public void Play()
     {
-        SceneManager.LoadScene("場景");
+        //SceneManager.LoadScene("場景");
+        StartCoroutine(Loading());
+    }
+
+    // 協同程序 Coroutine
+    private IEnumerator Loading()
+    {
+        //print(" 測試 1 ");
+        //yield return new WaitForSeconds(1);        //等待秒數(秒數);
+        //print(" 測試 2 ");
+
+        AsyncOperation ao = SceneManager.LoadSceneAsync("場景");    //取得場景資訊
+        ao.allowSceneActivation = false;                            //取消載入場景
+
+        //當 (場景仔入 == 未完成)
+        while (ao.isDone == false)
+        {
+            // 更新介面並等待
+            loadingText.text = ((ao.progress / 0.9f) * 100).ToString();
+            loading.value = ao.progress / 0.9f;
+            yield return new WaitForSeconds(0.0001f);
+
+            //如果 載入進度 == 0.9 並且 按下任意鍵
+            if (ao.progress == 0.9f  && Input.anyKey)
+            {
+                ao.allowSceneActivation = true;
+            }
+        }
     }
 }
+
+
