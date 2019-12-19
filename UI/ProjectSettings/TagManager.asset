@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - "\u9677\u9631"
+  - Metal
+  - Target
+  - ExplosiveBarrel
+  - "\u96DE\u817F"
   layers:
   - Default
   - TransparentFX
